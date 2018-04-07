@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.clicks
 import hanmo.com.slime.R
@@ -33,8 +34,10 @@ class MainActivity : AppCompatActivity() {
                 .subscribe {
                     val intent = SearchActivity.newIntent(this@MainActivity)
                     val searchNameHolder = findViewById<TextView>(R.id.txt_search)
+                    val searchImageHolder = findViewById<ImageView>(R.id.img_menuSearch)
                     val holderPair = android.support.v4.util.Pair.create(searchNameHolder as View, "searchHolder")
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity, holderPair)
+                    val imageHolderPair = android.support.v4.util.Pair.create(searchImageHolder as View, "searchImageHolder")
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity, holderPair, imageHolderPair)
                     ActivityCompat.startActivity(this@MainActivity, intent, options.toBundle())
                 }
                 .apply { compositeDisposable.add(this) }

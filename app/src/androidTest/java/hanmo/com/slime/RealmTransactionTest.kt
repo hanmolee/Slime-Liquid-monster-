@@ -6,14 +6,17 @@ import io.realm.Realm
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.junit.runners.MethodSorters
 
 /**
  * Created by hanmo on 2018. 4. 7..
  */
 @RunWith(JUnit4::class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class RealmTransactionTest {
 
     private lateinit var realm : Realm
@@ -25,7 +28,7 @@ class RealmTransactionTest {
     }
 
     @Test
-    fun 검색어를_입력해서_버튼을누르면_히스토리에_저장되는가() {
+    fun a검색어를_입력해서_버튼을누르면_히스토리에_저장되는가() {
 
         val historyMaxId = realm.where(SearchHistory::class.java).max("id")
         val nextId : Int =
@@ -54,6 +57,74 @@ class RealmTransactionTest {
             assertEquals(currentTime, it.searchTime)
         }
 
+    }
+
+    @Test
+    fun b검색히스토리_클릭시_가장최신으로_검색어가_위치하는가() {
+
+        val searchItemName = "Search Slime"
+        val history = realm.where(SearchHistory::class.java).equalTo("historyName", searchItemName).findFirst()
+
+        val currentTime = System.currentTimeMillis()
+
+        assertNotNull(history)
+
+        realm.executeTransaction {
+            history?.let {
+                it.searchTime = currentTime
+            }
+        }
+
+        val checkHistory = realm.where(SearchHistory::class.java).equalTo("historyName", searchItemName).findFirst()
+        assertNotNull(checkHistory)
+
+        checkHistory?.let {
+            assertEquals(currentTime, it.searchTime)
+        }
+
+    }
+
+    @Test
+    fun c검색히스토리가_개별적으로_삭제되는가() {
+        val searchItemName = "Search Slime"
+        val history = realm.where(SearchHistory::class.java).equalTo("historyName", searchItemName).findFirst()
+
+        assertNotNull(history)
+
+        realm.executeTransaction {
+            history?.deleteFromRealm()
+        }
+
+        val checkHistory = realm.where(SearchHistory::class.java).equalTo("historyName", searchItemName).findFirst()
+        assertNull(checkHistory)
+    }
+
+    @Test
+    fun d모든검색히스토리가_삭제되는가() {
+
+        for (i in 1..5) {
+            val history = SearchHistory()
+            history.id = i
+            history.historyName = "historyName Number is $i"
+            history.searchTime = System.currentTimeMillis()
+
+            realm.executeTransaction {
+                it.copyToRealm(history)
+            }
+        }
+
+        val historys = realm.where(SearchHistory::class.java).findAll()
+
+        assertNotNull(historys)
+        assertEquals(false, historys.isEmpty())
+
+        realm.executeTransaction {
+            historys?.deleteAllFromRealm()
+        }
+
+        val checkHistory = realm.where(SearchHistory::class.java).findAll()
+        assertNotNull(checkHistory)
+        assertEquals(true, checkHistory.isEmpty())
     }
 
     @After

@@ -115,6 +115,8 @@
                 android:textSize="@dimen/menu_txt_size" />
 
             <ImageView
+                android:id="@+id/img_menuSearch"
+                android:transitionName="searchImageHolder"
                 android:layout_width="@dimen/menu_img_size"
                 android:layout_height="@dimen/menu_img_size"
                 android:layout_margin="@dimen/basicMargin"
