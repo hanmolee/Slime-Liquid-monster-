@@ -4,4 +4,13 @@
     <color name="colorPrimaryDark">#2F2F2F</color>
     <color name="colorAccent">#72AAB1</color>
     <color name="colorBackground">#3E3E3E</color>
+
+    <color name="whiteColor">#ffffff</color>
+
+
+    <color name="searchTextColor">#629CC1</color>
+    <color name="todayTextColor">#8CC273</color>
+    <color name="favoriteTextColor">#A5403C</color>
+    <color name="startSearchBg">#95000000</color>
+
 </resources>

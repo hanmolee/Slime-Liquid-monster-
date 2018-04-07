@@ -1,4 +1,4 @@
-package hanmo.com.slime
+package hanmo.com.slime.menu
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.clicks
+import hanmo.com.slime.R
 import hanmo.com.slime.favorite.FavoriteActivity
 import hanmo.com.slime.search.SearchActivity
 import hanmo.com.slime.today.TodayActivity
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 .apply { compositeDisposable.add(this) }
     }
+
 
     override fun onDestroy() {
         compositeDisposable.clear()

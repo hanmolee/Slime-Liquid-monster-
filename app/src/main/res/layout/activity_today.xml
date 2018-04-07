@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="Today"
-        android:textColor="@android:color/white"
-        android:textSize="50dp"
+        android:text="@string/today"
+        android:textColor="@color/todayTextColor"
+        android:textSize="@dimen/activity_txt_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="menu_txt_size">32sp</dimen>
+    <dimen name="activity_txt_size">40sp</dimen>
+    <dimen name="basicMargin">8dp</dimen>
+    <dimen name="menu_img_size">48dp</dimen>
+    <dimen name="searchButtonElevation">6dp</dimen>
+</resources>
