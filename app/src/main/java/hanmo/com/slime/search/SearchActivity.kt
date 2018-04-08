@@ -101,19 +101,25 @@ class SearchActivity : AppCompatActivity() {
                         }
                     }
                     else {
-                        val searchText = et_search.text.toString().trim()
-                        if (!TextUtils.isEmpty(searchText)){
-                            hideEditText(frame_layout)
+                        if (et_search.text.isNotEmpty()){
 
-                            RealmHelper.instance.insertSearchHistory(searchText)
+                            val searchText = et_search.text.toString().trim()
+                            if (!TextUtils.isEmpty(searchText)){
+                                hideEditText(frame_layout)
 
-                            setSearchList()
+                                RealmHelper.instance.insertSearchHistory(searchText)
+
+                                setSearchList()
+                            }
+                            else {
+                                Snackbar.make(btn_search,
+                                        getString(R.string.alertSearchText),
+                                        Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show()
+                            }
                         }
                         else {
-                            Snackbar.make(btn_search,
-                                    getString(R.string.alertSearchText),
-                                    Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null).show()
+                            hideEditText(frame_layout)
                         }
                     }
                 }

@@ -2,6 +2,7 @@ package hanmo.com.slime.today
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import hanmo.com.slime.R
@@ -46,9 +47,12 @@ class TodayAdapter(val slime: ArrayList<String?>, private val type : Int) : Recy
             with(itemView){
                 itemView.slimeName.text = slime
                 Picasso.with(context).load(SlimeImage(slime!!).getImageResourceId(context)).into(itemView.slimeImage)
+                itemView.hasFavorite.setOnClickListener{
 
+                }
             }
         }
+
     }
 
     inner class SlimeCardViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
