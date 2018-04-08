@@ -29,25 +29,14 @@ class HistoryAdapter(val item : ArrayList<History>) : RecyclerView.Adapter<Recyc
     }
 
     inner class SearchHistoryHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_searchhistory, parent, false)), View.OnClickListener {
+            LayoutInflater.from(parent.context).inflate(R.layout.item_searchhistory, parent, false)) {
 
         fun bindView(item: History) {
-            itemView.setOnClickListener(this)
             with(itemView){
                 itemView.itemHisrotyName.text = item.name
 
             }
 
         }
-
-        override fun onClick(v: View?) {
-            when(v) {
-                itemView -> {
-                    //히스토리 아이템 클릭 시 디테일 뷰 연동
-                }
-            }
-        }
-
     }
-
 }

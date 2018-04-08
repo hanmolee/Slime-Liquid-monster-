@@ -4,12 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import hanmo.com.slime.R
+import kotlinx.android.synthetic.main.activity_today.*
 
 /**
  * Created by hanmo on 2018. 4. 7..
  */
 class TodayActivity : AppCompatActivity() {
+
+    private val slimeNameArray = arrayOf("slime1", "slime2", "slime3", "slime4", "slime5", "slime6")
 
     companion object {
 
@@ -23,6 +27,12 @@ class TodayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_today)
 
+        with(todayList) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            val todayAdapter = TodayAdapter(slimeNameArray)
+            //todayAdapter.setOnItemClickListener(onItemClickListener)
+            adapter = todayAdapter
+        }
     }
-
 }

@@ -9,7 +9,7 @@
             <solid
                 android:color="@color/whiteColor"/>
             <corners android:radius="10dp" />
-            <stroke android:width="2dp"
+            <stroke android:width="0.8dp"
                 android:color="@color/favoriteTextColor"/>
             <padding
                 android:bottom="0dp"

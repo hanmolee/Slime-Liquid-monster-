@@ -82,6 +82,8 @@ dependencies {
     // Test helpers for Room
     testImplementation "android.arch.persistence.room:testing:1.0.0"
 
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
     testImplementation 'junit:junit:4.12'
     testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$MOCKITO_LIBRARY_VERSION"
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
