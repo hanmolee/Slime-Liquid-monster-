@@ -2,7 +2,9 @@ package hanmo.com.slime
 
 import android.support.test.InstrumentationRegistry
 import hanmo.com.slime.db.SearchHistory
+import hanmo.com.slime.db.Slime
 import io.realm.Realm
+import io.realm.RealmResults
 import io.realm.Sort
 import org.junit.After
 import org.junit.Assert.*
@@ -134,6 +136,53 @@ class RealmTransactionTest {
         val checkHistory = realm.where(SearchHistory::class.java).findAll()
         assertNotNull(checkHistory)
         assertEquals(true, checkHistory.isEmpty())
+    }
+
+    @Test
+    fun f_insertSlime() {
+        val slimeMaxId = realm.where(Slime::class.java).max("id")
+        val nextId : Int =
+                when(slimeMaxId) {
+                    null -> { 1 }
+                    else -> { slimeMaxId.toInt() + 1 }
+                }
+
+        val slimeName = "slime1"
+
+        val slime = Slime()
+        slime.id = nextId
+        slime.slimeName = slimeName
+
+        realm.executeTransaction {
+            it.copyToRealm(slime)
+        }
+
+        val checkSlime = realm.where(Slime::class.java).equalTo("id", nextId).findFirst()
+        assertNotNull(checkSlime)
+
+        checkSlime?.let {
+            assertEquals(nextId, it.id)
+            assertEquals(slimeName, it.slimeName)
+        }
+
+    }
+
+    @Test
+    fun g_searchSlimeData() {
+
+        val searchSlime = "slime1"
+        val slimeData = realm.where(Slime::class.java).contains("slimeName", searchSlime).findAll()
+        assertNotNull(slimeData)
+
+    }
+
+    @Test
+    fun h_getSearchSlimeData() {
+        val getSearchHistory = realm.where(SearchHistory::class.java).findAll().sort("searchTime", Sort.DESCENDING).first()
+
+        val slimeData = realm.where(Slime::class.java).contains("slimeName", getSearchHistory?.historyName).findAll()
+        assertNotNull(slimeData)
+
     }
 
     @After

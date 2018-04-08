@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.clicks
 import hanmo.com.slime.R
+import hanmo.com.slime.db.RealmHelper
+import hanmo.com.slime.db.Slime
 import hanmo.com.slime.favorite.FavoriteActivity
 import hanmo.com.slime.search.SearchActivity
 import hanmo.com.slime.today.TodayActivity
@@ -25,8 +27,21 @@ class MainActivity : AppCompatActivity() {
 
         compositeDisposable = CompositeDisposable()
 
+        insertSlimeSampleData()
+
         setupButton()
 
+    }
+
+    private fun insertSlimeSampleData() {
+        val initSample = RealmHelper.instance.queryAll(Slime::class.java)
+        if (initSample?.isEmpty()!!) {
+            val slimeNameArray = arrayOf("slime1", "slime2", "slime3", "slime4", "slime5", "slime6", "slime1", "slime2", "slime3", "slime4", "slime5", "slime6", "slime1", "slime2", "slime3", "slime4", "slime5", "slime6")
+
+            for (i in 0 until slimeNameArray.size){
+                RealmHelper.instance.insertSlimeSampleData(slimeNameArray[i])
+            }
+        }
     }
 
     private fun setupButton() {

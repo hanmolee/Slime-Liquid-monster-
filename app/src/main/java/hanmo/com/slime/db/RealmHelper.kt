@@ -27,6 +27,26 @@ class RealmHelper {
         }
     }
 
+    fun insertSlimeSampleData(slimeName : String) {
+        val slimeMaxId = realm.where(Slime::class.java).max("id")
+        val nextId : Int =
+                when(slimeMaxId) {
+                    null -> { 1 }
+                    else -> { slimeMaxId.toInt() + 1 }
+                }
+
+        val slime = Slime()
+        slime.id = nextId
+        slime.slimeName = slimeName
+
+        addData(slime)
+
+    }
+
+    fun selectSLimeSampleData(searchData : String?): RealmResults<Slime>? {
+        return realm.where(Slime::class.java).contains("slimeName", searchData).findAll()
+    }
+
     fun insertSearchHistory(historyName : String) {
 
         val historyMaxId = realm.where(SearchHistory::class.java).max("id")
@@ -47,6 +67,12 @@ class RealmHelper {
     fun selectSearchHistory() : RealmResults<SearchHistory>? {
 
         return realm.where(SearchHistory::class.java).distinct("historyName").findAll().sort("searchTime", Sort.DESCENDING)
+    }
+
+    fun getSearchSlimeData(): RealmResults<Slime>? {
+        val getSearchHistory = realm.where(SearchHistory::class.java).findAll().sort("searchTime", Sort.DESCENDING).first()
+
+        return selectSLimeSampleData(getSearchHistory?.historyName)
     }
 
 

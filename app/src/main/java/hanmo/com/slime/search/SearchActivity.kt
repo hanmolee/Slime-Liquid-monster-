@@ -9,6 +9,7 @@ import android.support.constraint.ConstraintLayout
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewAnimationUtils
@@ -16,8 +17,10 @@ import android.view.animation.AlphaAnimation
 import android.view.inputmethod.InputMethodManager
 import com.jakewharton.rxbinding2.view.clicks
 import hanmo.com.slime.R
+import hanmo.com.slime.constants.Type
 import hanmo.com.slime.db.RealmHelper
 import hanmo.com.slime.model.History
+import hanmo.com.slime.today.TodayAdapter
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_search.*
 
@@ -29,6 +32,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var compositeDisposable: CompositeDisposable
     private var isEditTextVisible: Boolean = false
     private lateinit var inputManager: InputMethodManager
+    private lateinit var staggeredGridLayoutManager: StaggeredGridLayoutManager
 
     companion object {
 
@@ -45,7 +49,30 @@ class SearchActivity : AppCompatActivity() {
         compositeDisposable = CompositeDisposable()
         inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
+        //setSearchList()
+
         setSearchButton()
+    }
+
+    private fun setSearchList() {
+
+        val slimeData = ArrayList<String?>()
+
+        with(SearchList) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            staggeredGridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = staggeredGridLayoutManager
+            getSearchSlimeData(slimeData)
+            adapter = TodayAdapter(slimeData, Type.CardList)
+        }
+    }
+
+    private fun getSearchSlimeData(slimeData: ArrayList<String?>) {
+        val getSlimeData = RealmHelper.instance.getSearchSlimeData()
+        getSlimeData?.forEach {
+            slimeData.add(it.slimeName)
+        }
     }
 
     private fun setSearchButton() {
@@ -79,6 +106,8 @@ class SearchActivity : AppCompatActivity() {
                             hideEditText(frame_layout)
 
                             RealmHelper.instance.insertSearchHistory(searchText)
+
+                            setSearchList()
                         }
                         else {
                             Snackbar.make(btn_search,

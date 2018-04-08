@@ -12,4 +12,5 @@
     <dimen name="FABsearchTopMargin">13dp</dimen>
     <dimen name="slimeImageSize">48dp</dimen>
     <dimen name="slimeNameSize">17sp</dimen>
+    <dimen name="card_corner_radius">5dp</dimen>
 </resources>
