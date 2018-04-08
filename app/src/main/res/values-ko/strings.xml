@@ -4,5 +4,6 @@
     <string name="today">오늘</string>
     <string name="favorite">즐겨찾기</string>
     <string name="search">검색</string>
-    <string name="searchHint">please search</string>
+    <string name="searchHint">검색어를 입력해주세요.</string>
+    <string name="alertSearchText">검색어를 한글자 이상 입력해주세요.</string>
 </resources>

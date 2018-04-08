@@ -18,4 +18,5 @@
     <string name="text_fork">This repository is a fork</string>
     <string name="text_language">Language: %s</string>
     <string name="searchHint">please search</string>
+    <string name="alertSearchText">Please enter more than one character.</string>
 </resources>

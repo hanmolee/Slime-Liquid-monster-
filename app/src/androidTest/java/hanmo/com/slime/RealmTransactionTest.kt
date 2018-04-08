@@ -3,6 +3,7 @@ package hanmo.com.slime
 import android.support.test.InstrumentationRegistry
 import hanmo.com.slime.db.SearchHistory
 import io.realm.Realm
+import io.realm.Sort
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -60,7 +61,15 @@ class RealmTransactionTest {
     }
 
     @Test
-    fun b검색히스토리_클릭시_가장최신으로_검색어가_위치하는가() {
+    fun bselectSearchHistory() {
+
+        val selectQuery = realm.where(SearchHistory::class.java).distinct("historyName").findAll().sort("searchTime", Sort.DESCENDING)
+        assertNotNull(selectQuery)
+        assertNotEquals(true, selectQuery.isEmpty())
+    }
+
+    @Test
+    fun c검색히스토리_클릭시_가장최신으로_검색어가_위치하는가() {
 
         val searchItemName = "Search Slime"
         val history = realm.where(SearchHistory::class.java).equalTo("historyName", searchItemName).findFirst()
@@ -85,7 +94,7 @@ class RealmTransactionTest {
     }
 
     @Test
-    fun c검색히스토리가_개별적으로_삭제되는가() {
+    fun d검색히스토리가_개별적으로_삭제되는가() {
         val searchItemName = "Search Slime"
         val history = realm.where(SearchHistory::class.java).equalTo("historyName", searchItemName).findFirst()
 
@@ -100,7 +109,7 @@ class RealmTransactionTest {
     }
 
     @Test
-    fun d모든검색히스토리가_삭제되는가() {
+    fun e모든검색히스토리가_삭제되는가() {
 
         for (i in 1..5) {
             val history = SearchHistory()

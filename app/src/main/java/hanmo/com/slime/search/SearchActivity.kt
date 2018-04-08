@@ -6,14 +6,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import com.jakewharton.rxbinding2.view.clicks
 import hanmo.com.slime.R
+import hanmo.com.slime.db.RealmHelper
+import hanmo.com.slime.model.History
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_search.*
 
@@ -49,15 +53,40 @@ class SearchActivity : AppCompatActivity() {
 
         btn_search.clicks()
                 .doOnNext {
-                    if (!isEditTextVisible){
-                        revealEditText(frame_layout)
-                    }
-                    else {
-                        hideEditText(frame_layout)
-                    }
+
                 }
                 .subscribe {
-                    Toast.makeText(applicationContext, "click", Toast.LENGTH_SHORT).show()
+                    if (!isEditTextVisible){
+                        revealEditText(frame_layout)
+
+                        val historyList = ArrayList<History>()
+                        val searchHistory = RealmHelper.instance.selectSearchHistory()
+                        searchHistory?.forEach {
+                            historyList.add(History(it.historyName))
+                        }
+
+                        with(searchHistoryList) {
+                            setHasFixedSize(true)
+                            layoutManager = LinearLayoutManager(context)
+                            val historyAdapter = HistoryAdapter(historyList)
+                            //historyAdapter.setOnItemClickListener(onItemClickListener)
+                            adapter = historyAdapter
+                        }
+                    }
+                    else {
+                        val searchText = et_search.text.toString().trim()
+                        if (!TextUtils.isEmpty(searchText)){
+                            hideEditText(frame_layout)
+
+                            RealmHelper.instance.insertSearchHistory(searchText)
+                        }
+                        else {
+                            Snackbar.make(btn_search,
+                                    getString(R.string.alertSearchText),
+                                    Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show()
+                        }
+                    }
                 }
                 .apply { compositeDisposable.add(this) }
     }
