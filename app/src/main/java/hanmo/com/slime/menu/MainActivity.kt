@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private fun insertSlimeSampleData() {
         val initSample = RealmHelper.instance.queryAll(Slime::class.java)
         if (initSample?.isEmpty()!!) {
-            val slimeNameArray = arrayOf("slime1", "slime2", "slime3", "slime4", "slime5", "slime6", "slime1", "slime2", "slime3", "slime4", "slime5", "slime6", "slime1", "slime2", "slime3", "slime4", "slime5", "slime6")
+            val slimeNameArray = arrayOf("slime1", "slime2", "slime3", "slime4", "slime5", "slime6", "slime1", "slime2", "slime3", "slime4", "slime5", "slime6")
 
             for (i in 0 until slimeNameArray.size){
                 RealmHelper.instance.insertSlimeSampleData(slimeNameArray[i])

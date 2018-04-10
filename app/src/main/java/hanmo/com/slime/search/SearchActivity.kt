@@ -20,6 +20,7 @@ import hanmo.com.slime.R
 import hanmo.com.slime.constants.Type
 import hanmo.com.slime.db.RealmHelper
 import hanmo.com.slime.model.History
+import hanmo.com.slime.model.SlimeData
 import hanmo.com.slime.today.TodayAdapter
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_search.*
@@ -56,7 +57,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setSearchList() {
 
-        val slimeData = ArrayList<String?>()
+        val slimeData = ArrayList<SlimeData?>()
 
         with(SearchList) {
             setHasFixedSize(true)
@@ -68,10 +69,10 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun getSearchSlimeData(slimeData: ArrayList<String?>) {
+    private fun getSearchSlimeData(slimeData: ArrayList<SlimeData?>) {
         val getSlimeData = RealmHelper.instance.getSearchSlimeData()
         getSlimeData?.forEach {
-            slimeData.add(it.slimeName)
+            slimeData.add(SlimeData(it.id, it.slimeName))
         }
     }
 

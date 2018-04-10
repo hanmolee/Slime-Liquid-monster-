@@ -9,6 +9,7 @@ import hanmo.com.slime.R
 import hanmo.com.slime.constants.Type
 import hanmo.com.slime.db.RealmHelper
 import hanmo.com.slime.db.Slime
+import hanmo.com.slime.model.SlimeData
 import kotlinx.android.synthetic.main.activity_today.*
 
 /**
@@ -28,7 +29,7 @@ class TodayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_today)
 
-        val slimeData = ArrayList<String?>()
+        val slimeData = ArrayList<SlimeData?>()
 
         with(todayList) {
             setHasFixedSize(true)
@@ -40,10 +41,10 @@ class TodayActivity : AppCompatActivity() {
         }
     }
 
-    private fun getSlimeData(slimeData: ArrayList<String?>) {
+    private fun getSlimeData(slimeData: ArrayList<SlimeData?>) {
         val slime = RealmHelper.instance.queryAll(Slime::class.java)
         slime?.forEach {
-             slimeData.add(it.slimeName)
+             slimeData.add(SlimeData(it.id, it.slimeName))
         }
     }
 }

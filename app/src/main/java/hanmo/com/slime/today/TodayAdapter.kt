@@ -1,26 +1,29 @@
 package hanmo.com.slime.today
 
 import android.animation.Animator
-import android.graphics.drawable.Animatable
-import android.opengl.Visibility
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import com.jakewharton.rxbinding2.view.clicks
 import com.squareup.picasso.Picasso
 import hanmo.com.slime.R
 import hanmo.com.slime.constants.Type
+import hanmo.com.slime.db.FavoriteSlime
+import hanmo.com.slime.db.RealmHelper
+import hanmo.com.slime.model.SlimeData
 import hanmo.com.slime.model.SlimeImage
 import kotlinx.android.synthetic.main.item_search_slime.view.*
 
 /**
  * Created by hanmo on 2018. 4. 8..
  */
-class TodayAdapter(val slime: ArrayList<String?>, private val type : Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TodayAdapter(val slime: ArrayList<SlimeData?>, private val type: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
+        Log.e("TodayAdapter Type!", type.toString())
+        
         when(type) {
             Type.LinearList -> return SlimeHolder(parent)
             Type.CardList -> return SlimeCardViewHolder(parent)
@@ -48,12 +51,24 @@ class TodayAdapter(val slime: ArrayList<String?>, private val type : Int) : Recy
     inner class SlimeHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_search_slime, parent, false)) {
 
-        fun bindView(slime: String?) {
+        fun bindView(slime: SlimeData?) {
             with(itemView){
-                itemView.slimeName.text = slime
-                Picasso.with(context).load(SlimeImage(slime!!).getImageResourceId(context)).into(itemView.slimeImage)
-                itemView.hasFavorite.setOnClickListener{
-                    if (itemView.hasFavorite.isChecked){
+                this.slimeName.text = slime?.slimeName
+                Picasso.with(context).load(SlimeImage(slime?.slimeName!!).getImageResourceId(context)).into(this.slimeImage)
+
+                val favoriteSlime = RealmHelper.instance.queryAll(FavoriteSlime::class.java)
+                favoriteSlime?.forEach {
+                    when(slime.slimeId) {
+                        it.slimeId -> {
+                            this.hasFavorite.isChecked = true
+                        }
+                    }
+                }
+
+                this.hasFavorite.setOnClickListener{
+                    if (this.hasFavorite.isChecked){
+
+                        RealmHelper.instance.insertFavoriteData(slime.slimeId, slime.slimeName)
 
                         favoriteLottie.visibility = View.VISIBLE
                         favoriteLottie.playAnimation()
@@ -78,6 +93,9 @@ class TodayAdapter(val slime: ArrayList<String?>, private val type : Int) : Recy
 
                     } else {
 
+                        //데이터가 없으면 예외처리 해주어야 한다.
+                        RealmHelper.instance.deleteFavoriteData(slime.slimeId)
+
                     }
                 }
             }
@@ -88,10 +106,10 @@ class TodayAdapter(val slime: ArrayList<String?>, private val type : Int) : Recy
     inner class SlimeCardViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_card_search_slime, parent, false)) {
 
-        fun bindView(slime: String?) {
+        fun bindView(slime: SlimeData?) {
             with(itemView){
-                itemView.slimeName.text = slime
-                Picasso.with(context).load(SlimeImage(slime!!).getImageResourceId(context)).into(itemView.slimeImage)
+                this.slimeName.text = slime?.slimeName
+                Picasso.with(context).load(SlimeImage(slime?.slimeName!!).getImageResourceId(context)).into(this.slimeImage)
             }
         }
     }
