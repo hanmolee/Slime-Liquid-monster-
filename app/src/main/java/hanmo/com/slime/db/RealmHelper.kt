@@ -75,6 +75,32 @@ class RealmHelper {
         return selectSLimeSampleData(getSearchHistory?.historyName)
     }
 
+    fun insertFavoriteData(slimeName: String, slimeId : Int) {
+        val favoriteMaxId = realm.where(FavoriteSlime::class.java).max("id")
+        val nextId : Int =
+                when(favoriteMaxId) {
+                    null -> { 1 }
+                    else -> { favoriteMaxId.toInt() + 1 }
+                }
+
+        val favorite = FavoriteSlime()
+        favorite.id = nextId
+        favorite.slimeName = slimeName
+        favorite.slimeId = slimeId
+
+        addData(favorite)
+    }
+
+    fun deleteFavoriteData(slimeId : Int) {
+
+        val favorite = realm.where(FavoriteSlime::class.java).equalTo("slimeId", slimeId).findAll()
+
+        realm.executeTransaction {
+            favorite?.deleteAllFromRealm()
+        }
+
+    }
+    
 
     //Insert To Realm
     fun <T : RealmObject> addData(data: T) {

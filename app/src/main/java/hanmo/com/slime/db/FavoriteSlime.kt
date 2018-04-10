@@ -11,6 +11,8 @@ class FavoriteSlime : RealmObject() {
     @PrimaryKey
     open var id : Int = 0
 
-    open var name : String? = null
+    open var slimeName : String? = null
+
+    open var slimeId : Int? = null
 
 }

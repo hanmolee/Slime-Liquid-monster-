@@ -196,10 +196,12 @@ class RealmTransactionTest {
                 }
 
         val slimeName = "slime1"
+        val slimeId : Int = 1
 
         val favorite = FavoriteSlime()
         favorite.id = nextId
-        favorite.name = slimeName
+        favorite.slimeName = slimeName
+        favorite.slimeId = slimeId
 
         realm.executeTransaction {
             it.copyToRealm(favorite)
@@ -210,7 +212,8 @@ class RealmTransactionTest {
 
         checkFavorite?.let {
             assertEquals(nextId, it.id)
-            assertEquals(slimeName, it.name)
+            assertEquals(slimeName, it.slimeName)
+            assertEquals(slimeId, it.slimeId)
         }
     }
 
