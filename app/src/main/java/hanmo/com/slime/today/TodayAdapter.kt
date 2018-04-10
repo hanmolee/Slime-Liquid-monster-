@@ -1,9 +1,14 @@
 package hanmo.com.slime.today
 
+import android.animation.Animator
+import android.graphics.drawable.Animatable
+import android.opengl.Visibility
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import com.jakewharton.rxbinding2.view.clicks
 import com.squareup.picasso.Picasso
 import hanmo.com.slime.R
 import hanmo.com.slime.constants.Type
@@ -48,7 +53,32 @@ class TodayAdapter(val slime: ArrayList<String?>, private val type : Int) : Recy
                 itemView.slimeName.text = slime
                 Picasso.with(context).load(SlimeImage(slime!!).getImageResourceId(context)).into(itemView.slimeImage)
                 itemView.hasFavorite.setOnClickListener{
+                    if (itemView.hasFavorite.isChecked){
 
+                        favoriteLottie.visibility = View.VISIBLE
+                        favoriteLottie.playAnimation()
+                        favoriteLottie.addAnimatorListener(object : Animator.AnimatorListener {
+                            override fun onAnimationRepeat(animation: Animator?) {
+
+                            }
+
+                            override fun onAnimationEnd(animation: Animator?) {
+                                favoriteLottie.visibility = View.INVISIBLE
+                            }
+
+                            override fun onAnimationCancel(animation: Animator?) {
+
+                            }
+
+                            override fun onAnimationStart(animation: Animator?) {
+
+                            }
+
+                        })
+
+                    } else {
+
+                    }
                 }
             }
         }

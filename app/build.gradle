@@ -83,6 +83,8 @@ dependencies {
     testImplementation "android.arch.persistence.room:testing:1.0.0"
 
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    //lottie
+    implementation 'com.airbnb.android:lottie:2.5.4'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$MOCKITO_LIBRARY_VERSION"
