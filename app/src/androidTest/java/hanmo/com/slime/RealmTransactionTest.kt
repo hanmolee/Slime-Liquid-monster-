@@ -1,6 +1,7 @@
 package hanmo.com.slime
 
 import android.support.test.InstrumentationRegistry
+import hanmo.com.slime.db.FavoriteSlime
 import hanmo.com.slime.db.SearchHistory
 import hanmo.com.slime.db.Slime
 import io.realm.Realm
@@ -183,6 +184,49 @@ class RealmTransactionTest {
         val slimeData = realm.where(Slime::class.java).contains("slimeName", getSearchHistory?.historyName).findAll()
         assertNotNull(slimeData)
 
+    }
+
+    @Test
+    fun i_insertFavoriteData() {
+        val favoriteMaxId = realm.where(FavoriteSlime::class.java).max("id")
+        val nextId : Int =
+                when(favoriteMaxId) {
+                    null -> { 1 }
+                    else -> { favoriteMaxId.toInt() + 1 }
+                }
+
+        val slimeName = "slime1"
+
+        val favorite = FavoriteSlime()
+        favorite.id = nextId
+        favorite.name = slimeName
+
+        realm.executeTransaction {
+            it.copyToRealm(favorite)
+        }
+
+        val checkFavorite = realm.where(FavoriteSlime::class.java).equalTo("id", nextId).findFirst()
+        assertNotNull(checkFavorite)
+
+        checkFavorite?.let {
+            assertEquals(nextId, it.id)
+            assertEquals(slimeName, it.name)
+        }
+    }
+
+    @Test
+    fun j_deleteFavoriteData() {
+        val favoriteName = "slime1"
+        val favorite = realm.where(FavoriteSlime::class.java).equalTo("name", favoriteName).findFirst()
+
+        assertNotNull(favorite)
+
+        realm.executeTransaction {
+            favorite?.deleteFromRealm()
+        }
+
+        val checkFavorite = realm.where(FavoriteSlime::class.java).equalTo("name", favoriteName).findFirst()
+        assertNull(checkFavorite)
     }
 
     @After
