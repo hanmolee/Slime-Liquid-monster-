@@ -13,6 +13,7 @@ import hanmo.com.slime.db.FavoriteSlime
 import hanmo.com.slime.db.RealmHelper
 import hanmo.com.slime.model.SlimeData
 import hanmo.com.slime.model.SlimeImage
+import hanmo.com.slime.util.DLog
 import kotlinx.android.synthetic.main.item_search_slime.view.*
 
 /**
@@ -22,8 +23,8 @@ class TodayAdapter(val slime: ArrayList<SlimeData?>, private val type: Int) : Re
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        Log.e("TodayAdapter Type!", type.toString())
-        
+        DLog.e(type.toString())
+
         when(type) {
             Type.LinearList -> return SlimeHolder(parent)
             Type.CardList -> return SlimeCardViewHolder(parent)
