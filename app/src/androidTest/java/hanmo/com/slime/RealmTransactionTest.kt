@@ -5,6 +5,7 @@ import hanmo.com.slime.db.FavoriteSlime
 import hanmo.com.slime.db.SearchHistory
 import hanmo.com.slime.db.Slime
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import io.realm.Sort
 import org.junit.After
@@ -28,6 +29,14 @@ class RealmTransactionTest {
     @Before
     fun initDB() {
         Realm.init(InstrumentationRegistry.getTargetContext())
+
+        val realmConfiguration = RealmConfiguration.Builder()
+                .name("test.realm")
+                .deleteRealmIfMigrationNeeded()
+                .build()
+
+        Realm.setDefaultConfiguration(realmConfiguration)
+
         realm = Realm.getDefaultInstance()
     }
 
