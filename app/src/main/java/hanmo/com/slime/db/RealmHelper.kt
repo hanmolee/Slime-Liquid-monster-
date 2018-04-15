@@ -101,6 +101,20 @@ class RealmHelper {
 
     }
 
+    fun setLockScreenIsLock() {
+
+        val lockScreenIsLock = LockScreenTable()
+        lockScreenIsLock.id = 1
+        lockScreenIsLock.IsLock = true
+
+        addData(lockScreenIsLock)
+    }
+
+    fun getLockScreenIsLock() : Boolean? {
+        val getLockScreen = realm.where(LockScreenTable::class.java).findFirst()
+        return getLockScreen?.IsLock
+    }
+
 
     //Insert To Realm
     fun <T : RealmObject> addData(data: T) {

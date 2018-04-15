@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import android.telephony.TelephonyManager
+import hanmo.com.slime.lockscreen.LockscreenUtil
 import hanmo.com.slime.util.DLog
 
 /**
@@ -23,7 +24,7 @@ class LockScreenService : Service() {
         override fun onReceive(context: Context?, intent: Intent) {
             if (null != context) {
                 if (intent.action == Intent.ACTION_SCREEN_OFF) {
-                    val startLockscreenIntent = Intent(mContext, LockscreenViewService::class.java)
+                    val startLockscreenIntent = Intent(mContext, LockScreenViewService::class.java)
                     stopService(startLockscreenIntent)
                     val tManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
                     val isPhoneIdle = tManager.callState == TelephonyManager.CALL_STATE_IDLE
@@ -70,7 +71,7 @@ class LockScreenService : Service() {
 
     fun setLockGuard() {
         initKeyguardService()
-        if (!LockScreenUtil.instance(mContext).isStandardKeyguardState()) {
+        if (!LockscreenUtil.getInstance(mContext).isStandardKeyguardState) {
             setStandardKeyguardState(false)
         } else {
             setStandardKeyguardState(true)
