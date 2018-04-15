@@ -13,4 +13,6 @@ open class Slime : RealmObject() {
 
     open var slimeName : String? = null
 
+    open var slimeUrl : String? = null
+
 }

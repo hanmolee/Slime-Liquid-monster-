@@ -32,7 +32,7 @@ class RealmTransactionTest {
 
         val realmConfiguration = RealmConfiguration.Builder()
                 .name("test.realm")
-                .deleteRealmIfMigrationNeeded()
+                .inMemory()
                 .build()
 
         Realm.setDefaultConfiguration(realmConfiguration)
