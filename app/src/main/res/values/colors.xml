@@ -13,4 +13,6 @@
     <color name="favoriteTextColor">#A5403C</color>
     <color name="startSearchBg">#95000000</color>
 
+    <color name="lock_background_color">#222222</color>
+
 </resources>
