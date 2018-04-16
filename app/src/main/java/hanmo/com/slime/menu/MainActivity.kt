@@ -9,9 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.clicks
 import hanmo.com.slime.R
+import hanmo.com.slime.db.LockScreenTable
 import hanmo.com.slime.db.RealmHelper
 import hanmo.com.slime.db.Slime
 import hanmo.com.slime.favorite.FavoriteActivity
+import hanmo.com.slime.lockscreen.Lockscreen
 import hanmo.com.slime.search.SearchActivity
 import hanmo.com.slime.today.TodayActivity
 import io.reactivex.disposables.CompositeDisposable
@@ -26,10 +28,30 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         compositeDisposable = CompositeDisposable()
-
+        val initLockScreen = RealmHelper.instance.queryFirst(LockScreenTable::class.java)
+        if (initLockScreen == null) {
+            RealmHelper.instance.setLockScreenIsLock()
+        }
+        
         insertSlimeSampleData()
-
         setupButton()
+        setLockScreen()
+
+    }
+
+    private fun setLockScreen() {
+
+        val lockState = RealmHelper.instance.getLockScreenIsLock()
+        switch_locksetting.isChecked = lockState!!
+
+        switch_locksetting.setOnCheckedChangeListener { buttonView, isChecked ->
+            RealmHelper.instance.updateIsLock(isChecked)
+            if (isChecked) {
+                Lockscreen.getInstance(this)?.startLockscreenService()
+            } else {
+                Lockscreen.getInstance(this)?.stopLockscreenService()
+            }
+        }
 
     }
 
@@ -76,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                     ActivityCompat.startActivity(this@MainActivity, intent, options.toBundle())
                 }
                 .apply { compositeDisposable.add(this) }
+
     }
 
 

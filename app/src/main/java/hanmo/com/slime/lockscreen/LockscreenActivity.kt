@@ -14,6 +14,7 @@ import android.widget.RelativeLayout
 import hanmo.com.slime.R
 import hanmo.com.slime.db.RealmHelper
 import hanmo.com.slime.lockscreen.service.LockScreenViewService
+import hanmo.com.slime.util.DLog
 
 /**
  * Created by hanmo on 2018. 4. 16..
@@ -29,9 +30,19 @@ class LockscreenActivity : AppCompatActivity() {
         override fun onCallStateChanged(state: Int, incomingNumber: String) {
 
             when (state) {
-                TelephonyManager.CALL_STATE_IDLE -> { }
-                TelephonyManager.CALL_STATE_RINGING -> { }
-                else -> { }
+                TelephonyManager.CALL_STATE_IDLE -> {
+                    //아무행동이 없음
+                    DLog.e("TelephonyManager.CALL_STATE_IDLE :  $state")
+                }
+                TelephonyManager.CALL_STATE_RINGING -> {
+                    //전화가 오고 있는 상태
+                    DLog.e("TelephonyManager.CALL_STATE_RINGING :  $state")
+                    LockScreenViewService().dettachLockScreenView()
+
+                }
+                else -> {
+                    DLog.e("TelephonyManager.ELSE :  $state")
+                }
             }
         }
     }
@@ -87,7 +98,7 @@ class LockscreenActivity : AppCompatActivity() {
         isLockEnable = LockscreenUtil.getInstance(sLockscreenActivityContext).isStandardKeyguardState
 
         val startLockscreenIntent = Intent(this, LockScreenViewService::class.java)
-        startActivity(startLockscreenIntent)
+        startService(startLockscreenIntent)
 
         var isSoftkeyEnable = LockscreenUtil.getInstance(sLockscreenActivityContext).isSoftKeyAvail(this)
         RealmHelper.instance.updateIsSoftKey(isSoftkeyEnable)

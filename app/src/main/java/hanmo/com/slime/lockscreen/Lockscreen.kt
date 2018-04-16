@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import hanmo.com.slime.lockscreen.service.LockScreenService
 import hanmo.com.slime.lockscreen.service.LockScreenViewService
-import hanmo.com.slime.util.SharedPreferencesUtil
 
 /**
  * Created by hanmo on 2018. 4. 13..
