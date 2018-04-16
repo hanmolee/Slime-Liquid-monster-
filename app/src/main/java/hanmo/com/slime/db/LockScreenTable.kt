@@ -12,4 +12,6 @@ open class LockScreenTable : RealmObject() {
     open var id : Int = 0
 
     open var IsLock : Boolean? = null
+
+    open var IsSofyKey : Boolean? = null
 }

@@ -106,6 +106,7 @@ class RealmHelper {
         val lockScreenIsLock = LockScreenTable()
         lockScreenIsLock.id = 1
         lockScreenIsLock.IsLock = true
+        lockScreenIsLock.IsSofyKey = false
 
         addData(lockScreenIsLock)
     }
@@ -113,6 +114,14 @@ class RealmHelper {
     fun getLockScreenIsLock() : Boolean? {
         val getLockScreen = realm.where(LockScreenTable::class.java).findFirst()
         return getLockScreen?.IsLock
+    }
+
+    fun updateIsSoftKey(softkeyEnable: Boolean) {
+        val lockScreen = realm.where(LockScreenTable::class.java).findFirst()
+
+        realm.executeTransaction {
+            lockScreen?.IsSofyKey = softkeyEnable
+        }
     }
 
 
