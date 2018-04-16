@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import android.telephony.TelephonyManager
+import hanmo.com.slime.lockscreen.LockscreenActivity
 import hanmo.com.slime.lockscreen.LockscreenUtil
 import hanmo.com.slime.util.DLog
 
@@ -117,7 +118,7 @@ class LockScreenService : Service() {
     }
 
     private fun startLockscreenActivity() {
-        val startLockScreenActIntent = Intent(mContext, LockScreenActivity::class.java)
+        val startLockScreenActIntent = Intent(mContext, LockscreenActivity::class.java)
         startLockScreenActIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(startLockScreenActIntent)
     }
