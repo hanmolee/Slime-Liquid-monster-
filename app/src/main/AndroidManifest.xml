@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.PHONE_STATE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
 
     <application
         android:name="SlimeApplication"
@@ -38,7 +40,8 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".lockscreen.LockscreenActivity"
-            android:screenOrientation="portrait"/>
+            android:showOnLockScreen="true"
+            android:screenOrientation="sensorPortrait"/>
         <activity
             android:name=".lockscreen.PermissionActivity"
             android:screenOrientation="portrait"/>

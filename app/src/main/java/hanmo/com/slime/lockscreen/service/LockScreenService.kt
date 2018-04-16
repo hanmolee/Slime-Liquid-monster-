@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.telephony.TelephonyManager
 import android.util.Log
+import android.widget.Toast
 import hanmo.com.slime.lockscreen.LockScreenView
 import hanmo.com.slime.lockscreen.LockscreenActivity
 import hanmo.com.slime.lockscreen.LockscreenUtil
@@ -27,14 +28,20 @@ class LockScreenService : Service() {
     private val mLockscreenReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             if (null != context) {
-                if (intent.action == Intent.ACTION_SCREEN_OFF) {
-                    DLog.e("STOP SERVICE!!!!!")
-                    val startLockscreenIntent = Intent(mContext, LockScreenViewService::class.java)
-                    stopService(startLockscreenIntent)
-                    val tManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                    val isPhoneIdle = tManager.callState == TelephonyManager.CALL_STATE_IDLE
-                    if (isPhoneIdle) {
-                        startLockscreenActivity()
+                when(intent.action) {
+                    Intent.ACTION_SCREEN_OFF -> {
+                        DLog.e("STOP SERVICE!!!!!")
+                        val startLockscreenIntent = Intent(mContext, LockScreenViewService::class.java)
+                        stopService(startLockscreenIntent)
+                        val tManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                        val isPhoneIdle = tManager.callState == TelephonyManager.CALL_STATE_IDLE
+                        if (isPhoneIdle) {
+                            startLockscreenActivity()
+                        }
+                    }
+                    "android.provider.Telephony.SMS_RECEIVED" -> {
+                        DLog.e("메시지가 왔습니다!!!")
+                        Toast.makeText(mContext, "문자왔슴", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

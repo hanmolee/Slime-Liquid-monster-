@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Message
 import android.support.v7.app.AppCompatActivity
 import android.telephony.PhoneStateListener
+import android.telephony.SmsMessage
 import android.telephony.TelephonyManager
 import android.view.MotionEvent
 import android.view.WindowManager
@@ -56,6 +57,7 @@ class LockscreenActivity : AppCompatActivity() {
         window.setType(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
