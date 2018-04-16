@@ -37,8 +37,8 @@ class LockscreenActivity : AppCompatActivity() {
                 TelephonyManager.CALL_STATE_RINGING -> {
                     //전화가 오고 있는 상태
                     DLog.e("TelephonyManager.CALL_STATE_RINGING :  $state")
-                    LockScreenViewService().dettachLockScreenView()
-
+                    val stopLockscreenIntent = Intent(applicationContext, LockScreenViewService::class.java)
+                    stopService(stopLockscreenIntent)
                 }
                 else -> {
                     DLog.e("TelephonyManager.ELSE :  $state")
@@ -98,6 +98,7 @@ class LockscreenActivity : AppCompatActivity() {
         isLockEnable = LockscreenUtil.getInstance(sLockscreenActivityContext).isStandardKeyguardState
 
         val startLockscreenIntent = Intent(this, LockScreenViewService::class.java)
+        DLog.e("START SERVICE")
         startService(startLockscreenIntent)
 
         var isSoftkeyEnable = LockscreenUtil.getInstance(sLockscreenActivityContext).isSoftKeyAvail(this)

@@ -128,6 +128,8 @@ class LockScreenViewService : Service() {
         }
     }
 
+
+
     override fun onBind(intent:Intent) : IBinder? {
         return null
     }
@@ -139,7 +141,6 @@ class LockScreenViewService : Service() {
         //SharedPreferencesUtil.init(mContext)
         //        sIsSoftKeyEnable = SharedPreferencesUtil.get(Lockscreen.ISSOFTKEY);
     }
-
 
     override fun onStartCommand(intent : Intent, flags : Int, startId : Int) : Int {
         mMainHandler = SendMassgeHandler()
@@ -245,7 +246,7 @@ class LockScreenViewService : Service() {
 
         return if (null != mWindowManager && null != mLockscreenView && isAttachedToWindow) {
             DLog.e("detach true!!")
-            mWindowManager!!.removeView(mLockscreenView)
+            mWindowManager?.removeView(mLockscreenView)
             mLockscreenView = null
             mWindowManager = null
             stopSelf(mServiceStartId)

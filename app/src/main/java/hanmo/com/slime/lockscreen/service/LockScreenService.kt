@@ -12,6 +12,7 @@ import android.util.Log
 import hanmo.com.slime.lockscreen.LockScreenView
 import hanmo.com.slime.lockscreen.LockscreenActivity
 import hanmo.com.slime.lockscreen.LockscreenUtil
+import hanmo.com.slime.util.DLog
 
 /**
  * Created by hanmo on 2018. 4. 13..
@@ -27,6 +28,7 @@ class LockScreenService : Service() {
         override fun onReceive(context: Context?, intent: Intent) {
             if (null != context) {
                 if (intent.action == Intent.ACTION_SCREEN_OFF) {
+                    DLog.e("STOP SERVICE!!!!!")
                     val startLockscreenIntent = Intent(mContext, LockScreenViewService::class.java)
                     stopService(startLockscreenIntent)
                     val tManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
