@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.telephony.PhoneStateListener
 import android.telephony.SmsMessage
 import android.telephony.TelephonyManager
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.WindowManager
 import android.widget.RelativeLayout
@@ -32,11 +33,9 @@ class LockscreenActivity : AppCompatActivity() {
 
             when (state) {
                 TelephonyManager.CALL_STATE_IDLE -> {
-                    //아무행동이 없음
                     DLog.e("TelephonyManager.CALL_STATE_IDLE :  $state")
                 }
                 TelephonyManager.CALL_STATE_RINGING -> {
-                    //전화가 오고 있는 상태
                     DLog.e("TelephonyManager.CALL_STATE_RINGING :  $state")
                     val stopLockscreenIntent = Intent(applicationContext, LockScreenViewService::class.java)
                     stopService(stopLockscreenIntent)
@@ -113,6 +112,7 @@ class LockscreenActivity : AppCompatActivity() {
             }
         }
     }
+
 
     override fun onResume() {
         super.onResume()

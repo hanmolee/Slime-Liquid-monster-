@@ -28,6 +28,8 @@ class LockScreenService : Service() {
     private val mLockscreenReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             if (null != context) {
+                DLog.e("ACTION !!! ::::: " + intent.action)
+                DLog.e("CATEGORY !!! ::::: " + intent.categories)
                 when(intent.action) {
                     Intent.ACTION_SCREEN_OFF -> {
                         DLog.e("STOP SERVICE!!!!!")
@@ -38,10 +40,6 @@ class LockScreenService : Service() {
                         if (isPhoneIdle) {
                             startLockscreenActivity()
                         }
-                    }
-                    "android.provider.Telephony.SMS_RECEIVED" -> {
-                        DLog.e("메시지가 왔습니다!!!")
-                        Toast.makeText(mContext, "문자왔슴", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -112,6 +110,7 @@ class LockScreenService : Service() {
         } else {
 
             if (null != mKeyManager) {
+                DLog.e("홈키 잠금")
                 mKeyLock?.disableKeyguard()
             }
         }
