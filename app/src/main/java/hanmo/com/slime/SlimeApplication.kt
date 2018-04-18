@@ -9,6 +9,9 @@ import io.realm.RealmConfiguration
  */
 class SlimeApplication : MultiDexApplication() {
 
+    var lockScreenShow = false
+    var notificationId = 1989
+
     override fun onCreate() {
         super.onCreate()
 
