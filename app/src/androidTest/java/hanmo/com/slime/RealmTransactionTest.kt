@@ -2,6 +2,7 @@ package hanmo.com.slime
 
 import android.support.test.InstrumentationRegistry
 import hanmo.com.slime.db.FavoriteSlime
+import hanmo.com.slime.db.LockScreenTable
 import hanmo.com.slime.db.SearchHistory
 import hanmo.com.slime.db.Slime
 import io.realm.Realm
@@ -239,6 +240,34 @@ class RealmTransactionTest {
 
         val checkFavorite = realm.where(FavoriteSlime::class.java).equalTo("name", favoriteName).findFirst()
         assertNull(checkFavorite)
+    }
+
+    @Test
+    fun A_setLockScreenIsLock() {
+
+        val lockScreenIsLock = LockScreenTable()
+        lockScreenIsLock.id = 1
+        lockScreenIsLock.IsLock = true
+
+        realm.executeTransaction {
+            it.copyToRealm(lockScreenIsLock)
+        }
+
+        val checkLockScreen = realm.where(LockScreenTable::class.java).findFirst()
+        assertNotNull(checkLockScreen)
+        assertEquals(1, checkLockScreen?.id)
+        assertEquals(true, checkLockScreen?.IsLock)
+
+    }
+
+    @Test
+    fun B_getLockScreenIsLock() {
+        val getLockScreen = realm.where(LockScreenTable::class.java).findFirst()
+        assertNotNull(getLockScreen)
+        getLockScreen?.let {
+            assertEquals(1, getLockScreen.id)
+            assertEquals(true, getLockScreen.IsLock)
+        }
     }
 
     @After

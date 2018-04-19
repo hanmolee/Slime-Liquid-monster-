@@ -106,6 +106,37 @@ class RealmHelper {
 
     }
 
+    fun setLockScreenIsLock() {
+
+        val lockScreenIsLock = LockScreenTable()
+        lockScreenIsLock.id = 1
+        lockScreenIsLock.IsLock = true
+        lockScreenIsLock.IsSofyKey = false
+
+        addData(lockScreenIsLock)
+    }
+
+    fun getLockScreenIsLock() : Boolean? {
+        val getLockScreen = realm.where(LockScreenTable::class.java).findFirst()
+        return getLockScreen?.IsLock
+    }
+
+    fun updateIsLock(checked: Boolean) {
+        val lockScreen = realm.where(LockScreenTable::class.java).findFirst()
+
+        realm.executeTransaction {
+            lockScreen?.IsLock = checked
+        }
+    }
+
+    fun updateIsSoftKey(softkeyEnable: Boolean) {
+        val lockScreen = realm.where(LockScreenTable::class.java).findFirst()
+
+        realm.executeTransaction {
+            lockScreen?.IsSofyKey = softkeyEnable
+        }
+    }
+
 
     //Insert To Realm
     fun <T : RealmObject> addData(data: T) {
@@ -123,6 +154,10 @@ class RealmHelper {
 
     fun <T : RealmObject> queryAll(clazz: Class<T>): RealmResults<T>? {
         return realm.where(clazz).findAll()
+    }
+
+    fun <T : RealmObject> queryFirst(clazz: Class<T>): T? {
+        return realm.where(clazz).findFirst()
     }
 
     companion object {

@@ -7,18 +7,34 @@
     android:background="@color/colorBackground"
     tools:context="hanmo.com.slime.menu.MainActivity">
 
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/switch_locksetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:checked="false"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="@dimen/basicMargin"
         android:layout_marginEnd="@dimen/basicMargin"
         android:layout_marginStart="@dimen/basicMargin"
-        android:layout_marginTop="@dimen/basicMargin"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/switch_locksetting">
 
         <LinearLayout
             android:id="@+id/todayButton"
@@ -39,12 +55,12 @@
 
             <TextView
                 android:id="@+id/txt_today"
-                android:transitionName="todayHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/today"
                 android:textColor="@color/whiteColor"
-                android:textSize="@dimen/menu_txt_size" />
+                android:textSize="@dimen/menu_txt_size"
+                android:transitionName="todayHolder" />
 
             <ImageView
                 android:layout_width="@dimen/menu_img_size"
@@ -73,12 +89,12 @@
 
             <TextView
                 android:id="@+id/txt_favorite"
-                android:transitionName="favoriteHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/favorite"
                 android:textColor="@color/whiteColor"
-                android:textSize="@dimen/menu_txt_size" />
+                android:textSize="@dimen/menu_txt_size"
+                android:transitionName="favoriteHolder" />
 
             <ImageView
                 android:layout_width="@dimen/menu_img_size"
@@ -107,23 +123,22 @@
 
             <TextView
                 android:id="@+id/txt_search"
-                android:transitionName="searchHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/search"
                 android:textColor="@color/whiteColor"
-                android:textSize="@dimen/menu_txt_size" />
+                android:textSize="@dimen/menu_txt_size"
+                android:transitionName="searchHolder" />
 
             <ImageView
                 android:id="@+id/img_menuSearch"
-                android:transitionName="searchImageHolder"
                 android:layout_width="@dimen/menu_img_size"
                 android:layout_height="@dimen/menu_img_size"
                 android:layout_margin="@dimen/basicMargin"
+                android:transitionName="searchImageHolder"
                 app:srcCompat="@drawable/ic_search" />
 
         </LinearLayout>
-
     </LinearLayout>
 
 
