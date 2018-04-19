@@ -10,6 +10,7 @@ import hanmo.com.slime.lockscreen.utils.utils.LockScreenService
 import hanmo.com.slime.util.DLog
 import android.os.Looper.loop
 import com.airbnb.lottie.LottieAnimationView
+import hanmo.com.slime.util.RippleViewCreator
 import kotlinx.android.synthetic.main.activity_lockscreen.*
 
 
@@ -29,6 +30,8 @@ class LockScreenActivity : AppCompatActivity() {
             playAnimation()
         }*/
 
+
+        RippleViewCreator.addRippleToView(rippleTest)
 
     }
 

@@ -116,4 +116,12 @@
         app:layout_constraintTop_toBottomOf="@+id/clockView" />
 
 
+    <TextView
+        android:id="@+id/rippleTest"
+        android:text="fjlkdsafjlkdsajfkldsaflsfklh"
+        android:padding="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
 </android.support.constraint.ConstraintLayout>

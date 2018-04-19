@@ -55,12 +55,6 @@
 
         <service android:name=".lockscreen.utils.utils.LockScreenService" ></service>
 
-        <service android:name=".lockscreen.service.LockScreenService" />
-        <service android:name=".lockscreen.service.LockScreenViewService" />
-  
-        <activity android:name=".SlimeDetailActivity"
-            android:screenOrientation="portrait"/>
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="8a672da65b206f92c4873b276005c0a30d5a5cd6" />

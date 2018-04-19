@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import hanmo.com.slime.R
-import hanmo.com.slime.SlimeDetailActivity
 import hanmo.com.slime.constants.Type
 import hanmo.com.slime.db.FavoriteSlime
 import hanmo.com.slime.db.RealmHelper
@@ -67,10 +66,10 @@ class TodayAdapter(val slime: ArrayList<SlimeData?>, private val type: Int) : Re
                     }
                 }
 
-                this.playVideoButton.setOnClickListener {
+                /*this.playVideoButton.setOnClickListener {
                     val detailIntent = SlimeDetailActivity.newIntent(context)
                     context.startActivity(detailIntent)
-                }
+                }*/
 
                 this.hasFavorite.setOnClickListener{
                     if (this.hasFavorite.isChecked){
