@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import hanmo.com.slime.R
+import hanmo.com.slime.SlimeDetailActivity
 import hanmo.com.slime.constants.Type
 import hanmo.com.slime.db.FavoriteSlime
 import hanmo.com.slime.db.RealmHelper
@@ -53,7 +54,7 @@ class TodayAdapter(val slime: ArrayList<SlimeData?>, private val type: Int) : Re
             LayoutInflater.from(parent.context).inflate(R.layout.item_search_slime, parent, false)) {
 
         fun bindView(slime: SlimeData?) {
-            with(itemView){
+            with(itemView) {
                 this.slimeName.text = slime?.slimeName
                 Picasso.with(context).load(SlimeImage(slime?.slimeName!!).getImageResourceId(context)).into(this.slimeImage)
 
@@ -64,6 +65,11 @@ class TodayAdapter(val slime: ArrayList<SlimeData?>, private val type: Int) : Re
                             this.hasFavorite.isChecked = true
                         }
                     }
+                }
+
+                this.playVideoButton.setOnClickListener {
+                    val detailIntent = SlimeDetailActivity.newIntent(context)
+                    context.startActivity(detailIntent)
                 }
 
                 this.hasFavorite.setOnClickListener{
@@ -93,7 +99,6 @@ class TodayAdapter(val slime: ArrayList<SlimeData?>, private val type: Int) : Re
                         })
 
                     } else {
-
                         //데이터가 없으면 예외처리 해주어야 한다.
                         RealmHelper.instance.deleteFavoriteData(slime.slimeId)
 
