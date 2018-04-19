@@ -38,6 +38,7 @@ class RealmHelper {
         val slime = Slime()
         slime.id = nextId
         slime.slimeName = slimeName
+        slime.slimeUrl = "https://youtu.be/o3gae3I05vU"
 
         addData(slime)
 
@@ -45,6 +46,10 @@ class RealmHelper {
 
     fun selectSLimeSampleData(searchData : String?): RealmResults<Slime>? {
         return realm.where(Slime::class.java).contains("slimeName", searchData).findAll()
+    }
+
+    fun getSlimeSampleData(slimeId: Int) : Slime? {
+        return realm.where(Slime::class.java).equalTo("id", slimeId).findFirst()
     }
 
     fun insertSearchHistory(historyName : String) {
