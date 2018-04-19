@@ -39,6 +39,7 @@ kapt {
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -68,6 +69,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
     //lottie
     implementation 'com.airbnb.android:lottie:2.5.4'
+    implementation 'com.github.Triggertrap:SeekArc:v1.1'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$MOCKITO_LIBRARY_VERSION"
