@@ -13,7 +13,7 @@ import hanmo.com.slime.db.LockScreenTable
 import hanmo.com.slime.db.RealmHelper
 import hanmo.com.slime.db.Slime
 import hanmo.com.slime.favorite.FavoriteActivity
-import hanmo.com.slime.lockscreen.Lockscreen
+import hanmo.com.slime.lockscreen.utils.utils.LockScreen
 import hanmo.com.slime.search.SearchActivity
 import hanmo.com.slime.today.TodayActivity
 import io.reactivex.disposables.CompositeDisposable
@@ -28,10 +28,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         compositeDisposable = CompositeDisposable()
-        val initLockScreen = RealmHelper.instance.queryFirst(LockScreenTable::class.java)
-        if (initLockScreen == null) {
-            RealmHelper.instance.setLockScreenIsLock()
-        }
         
         insertSlimeSampleData()
         setupButton()
@@ -40,16 +36,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setLockScreen() {
-
-        val lockState = RealmHelper.instance.getLockScreenIsLock()
-        switch_locksetting.isChecked = lockState!!
-
+        LockScreen.instance.init(this, true)
         switch_locksetting.setOnCheckedChangeListener { buttonView, isChecked ->
-            RealmHelper.instance.updateIsLock(isChecked)
             if (isChecked) {
-                Lockscreen.getInstance(this)?.startLockscreenService()
+                LockScreen.instance.active()
             } else {
-                Lockscreen.getInstance(this)?.stopLockscreenService()
+                LockScreen.instance.deactivate()
             }
         }
 

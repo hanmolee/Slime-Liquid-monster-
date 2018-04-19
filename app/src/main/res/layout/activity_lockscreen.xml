@@ -1,10 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/lockscreen_main_layout"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".lockscreen.utils.LockScreenActivity"
+    android:id="@+id/lockScreenBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#10FF0000">
+    android:background="@drawable/images">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="84dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/lockScreenTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11:12"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textColor="@color/whiteColor"
+            android:textSize="60dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lockScreenDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3월 28일"
+                android:textColor="@color/whiteColor"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/lockScreenWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="화요일"
+                android:textColor="@color/whiteColor"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/lockScreenUntilTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_time"
+        android:padding="8dp"
+        android:text="오늘 11시간 흘렀고, 13시간 남았어요."
+        android:textColor="@color/whiteColor"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <hanmo.com.slime.lockscreen.utils.ClockView
+        android:id="@+id/clockView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lockScreenUntilTime" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        android:background="@drawable/circle_shape"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="75"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_marginTop="17dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lockScreenUntilTime" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/pigLottie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:lottie_fileName="like.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clockView" />
 
 
-</RelativeLayout>
-
+</android.support.constraint.ConstraintLayout>
