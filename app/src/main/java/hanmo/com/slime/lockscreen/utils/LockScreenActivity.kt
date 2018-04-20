@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
+import android.widget.ArrayAdapter
+import android.widget.SpinnerAdapter
 import hanmo.com.slime.R
 import hanmo.com.slime.SlimeApplication
-import hanmo.com.slime.lockscreen.utils.utils.LockScreenService
 import hanmo.com.slime.util.DLog
-import android.os.Looper.loop
-import com.airbnb.lottie.LottieAnimationView
 import hanmo.com.slime.util.RippleViewCreator
 import kotlinx.android.synthetic.main.activity_lockscreen.*
+import com.gordonwong.materialsheetfab.MaterialSheetFab
+
+
 
 
 /**
@@ -29,6 +31,13 @@ class LockScreenActivity : AppCompatActivity() {
             loop(true)
             playAnimation()
         }*/
+
+        hanmo.setOnClickListener {
+            val menuList = arrayOf("배경사진 바꾸기", "사용방법 다시보기", "문의하기", "설정")
+            val spinnerAdapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, menuList)
+            spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+            lockscreenMenu.adapter = spinnerAdapter
+        }
 
 
         RippleViewCreator.addRippleToView(rippleTest)

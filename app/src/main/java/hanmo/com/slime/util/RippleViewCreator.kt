@@ -71,6 +71,7 @@ class RippleViewCreator @JvmOverloads constructor(context: Context, attrs: Attri
         rippleY = event.y
 
         touchAction = event.action
+
         when (event.action) {
             MotionEvent.ACTION_UP -> {
                 parent.requestDisallowInterceptTouchEvent(false)
@@ -105,7 +106,7 @@ class RippleViewCreator @JvmOverloads constructor(context: Context, attrs: Attri
                 if (rippleX < 0 || rippleX > drawWidth || rippleY < 0 || rippleY > drawHeight) {
                     parent.requestDisallowInterceptTouchEvent(false)
                     touchAction = MotionEvent.ACTION_CANCEL
-
+                    
                 } else {
                     invalidate()
                     return true
