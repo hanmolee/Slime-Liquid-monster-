@@ -76,7 +76,7 @@ class ClockView : View {
             isAntiAlias = true
         }
 
-        canvas.drawLine((clockWidth / 2).toFloat(), (clockWidth / 2).toFloat(),
+        canvas.drawLine((clockWidth / 2 - Math.cos(angle) * 10).toFloat(), (clockWidth / 2 - Math.sin(angle) * 10).toFloat(),
                 (clockWidth / 2 + Math.cos(angle) * handRadius).toFloat(),
                 (clockHeight / 2 + Math.sin(angle) * handRadius).toFloat(),
                 hourPaint)
@@ -102,7 +102,7 @@ class ClockView : View {
 
         val sp = (clockWidth / 2).toFloat().toString()
         DLog.e(sp + ","+ sp + "/////" + (clockWidth / 2 + Math.cos(angle) * handRadius).toFloat().toString() + ", " + (clockHeight / 2 + Math.sin(angle) * handRadius).toFloat().toString())
-        canvas.drawLine((clockWidth / 2).toFloat(), (clockWidth / 2).toFloat(),
+        canvas.drawLine((clockWidth / 2 - Math.cos(angle) * 20).toFloat(), (clockWidth / 2 - Math.sin(angle) * 20).toFloat(),
                 (clockWidth / 2 + Math.cos(angle) * handRadius).toFloat(),
                 (clockHeight / 2 + Math.sin(angle) * handRadius).toFloat(),
                 minPaint)
@@ -117,14 +117,35 @@ class ClockView : View {
     }
 
     private fun drawNumeral(canvas: Canvas) {
-        paint.textSize = fontSize.toFloat()
+
+        val dialPaint1 = Paint()
+        with(dialPaint1) {
+            color = resources.getColor(android.R.color.white)
+            strokeWidth = 1.7f
+            style = Paint.Style.STROKE
+            isAntiAlias = true
+        }
+
+        val dialPaint2 = Paint()
+        with(dialPaint2) {
+            color = resources.getColor(android.R.color.white)
+            strokeWidth = 2.5f
+            style = Paint.Style.STROKE
+            isAntiAlias = true
+        }
 
         for (number in numbers) {
             val tmp = number.toString()
+            val ddd = radius  + padding - 10
             paint.getTextBounds(tmp, 0, tmp.length, rect)
             val angle = Math.PI / 6 * (number - 3)
-            val x = (clockWidth / 2 + Math.cos(angle) * radius - rect.width() / 2).toInt()
-            val y = ((clockHeight / 2).toDouble() + Math.sin(angle) * radius + (rect.height() / 2).toDouble()).toInt()
+            val x = (clockWidth / 2 + Math.cos(angle) * ddd).toFloat()
+            val y = (clockHeight / 2 + Math.sin(angle) * ddd).toFloat()
+
+            when(number % 3) {
+                0 -> { canvas.drawLine(x, y, (x - Math.cos(angle) * 16).toFloat(), (y - Math.sin(angle) * 16).toFloat(), dialPaint2) }
+                else -> { canvas.drawLine(x, y, (x - Math.cos(angle) * 12).toFloat(), (y - Math.sin(angle) * 12).toFloat(), dialPaint1) }
+            }
 
         }
     }
