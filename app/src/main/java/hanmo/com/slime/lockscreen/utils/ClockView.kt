@@ -6,6 +6,7 @@ import android.view.View
 import android.util.AttributeSet
 import android.util.TypedValue
 import hanmo.com.slime.R
+import hanmo.com.slime.util.DLog
 import java.util.*
 
 
@@ -22,7 +23,7 @@ class ClockView : View {
     private var handTruncation: Int = 0
     private var hourHandTruncation = 0
     private var radius = 0
-    private var paint: Paint? = null
+    private lateinit var paint: Paint
     private var isInit: Boolean = false
     private val numbers = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
     private val rect = Rect()
@@ -59,46 +60,86 @@ class ClockView : View {
         postInvalidateDelayed(500)
     }
 
-    private fun drawHand(canvas: Canvas, loc: Double, isHour: Boolean) {
+    private fun drawHourHand(canvas: Canvas, loc: Double, isHour: Boolean) {
         val angle = Math.PI * loc / 30 - Math.PI / 2
         val handRadius = if (isHour) radius - handTruncation - hourHandTruncation else radius - handTruncation
-        canvas.drawLine((clockWidth / 2).toFloat(), (clockHeight / 2).toFloat(),
+
+        val hourPaint = Paint()
+        with(hourPaint) {
+            strokeWidth = 13f
+            style = Paint.Style.STROKE
+            color = resources.getColor(android.R.color.white)
+            isDither = true
+            strokeJoin = Paint.Join.ROUND
+            strokeCap = Paint.Cap.ROUND
+            pathEffect = CornerPathEffect(10f)
+            isAntiAlias = true
+        }
+
+        canvas.drawLine((clockWidth / 2).toFloat(), (clockWidth / 2).toFloat(),
                 (clockWidth / 2 + Math.cos(angle) * handRadius).toFloat(),
                 (clockHeight / 2 + Math.sin(angle) * handRadius).toFloat(),
-                paint!!)
+                hourPaint)
+
+        DLog.e("Hour")
+    }
+
+    private fun drawMinHand(canvas: Canvas, loc: Double, isHour: Boolean) {
+        val angle = Math.PI * loc / 30 - Math.PI / 2
+        val handRadius = if (isHour) radius - handTruncation - hourHandTruncation else radius + padding - 10
+
+        val minPaint = Paint()
+        with(minPaint) {
+            strokeWidth = 3f
+            style = Paint.Style.STROKE
+            color = resources.getColor(android.R.color.white)
+            isDither = true
+            strokeJoin = Paint.Join.ROUND
+            strokeCap = Paint.Cap.ROUND
+            pathEffect = CornerPathEffect(10f)
+            isAntiAlias = true
+        }
+
+        val sp = (clockWidth / 2).toFloat().toString()
+        DLog.e(sp + ","+ sp + "/////" + (clockWidth / 2 + Math.cos(angle) * handRadius).toFloat().toString() + ", " + (clockHeight / 2 + Math.sin(angle) * handRadius).toFloat().toString())
+        canvas.drawLine((clockWidth / 2).toFloat(), (clockWidth / 2).toFloat(),
+                (clockWidth / 2 + Math.cos(angle) * handRadius).toFloat(),
+                (clockHeight / 2 + Math.sin(angle) * handRadius).toFloat(),
+                minPaint)
     }
 
     private fun drawHands(canvas: Canvas) {
         val c = Calendar.getInstance()
         var hour = c.get(Calendar.HOUR_OF_DAY)
         hour = if (hour > 12) hour - 12 else hour
-        drawHand(canvas, ((hour + c.get(Calendar.MINUTE) / 60) * 5f).toDouble(), true)
-        drawHand(canvas, c.get(Calendar.MINUTE).toDouble(), false)
+        drawHourHand(canvas, ((hour + c.get(Calendar.MINUTE) / 60) * 5f).toDouble(), false)
+        drawMinHand(canvas, c.get(Calendar.MINUTE).toDouble(), false)
     }
 
     private fun drawNumeral(canvas: Canvas) {
-        paint!!.textSize = fontSize.toFloat()
+        paint.textSize = fontSize.toFloat()
 
         for (number in numbers) {
             val tmp = number.toString()
-            paint!!.getTextBounds(tmp, 0, tmp.length, rect)
+            paint.getTextBounds(tmp, 0, tmp.length, rect)
             val angle = Math.PI / 6 * (number - 3)
             val x = (clockWidth / 2 + Math.cos(angle) * radius - rect.width() / 2).toInt()
             val y = ((clockHeight / 2).toDouble() + Math.sin(angle) * radius + (rect.height() / 2).toDouble()).toInt()
 
-            val image = BitmapFactory.decodeResource(context.resources, R.drawable.pic_hour)
-
-            canvas.drawBitmap(image, x.toFloat(), y.toFloat(), paint!!)
         }
     }
 
     private fun drawCircle(canvas: Canvas) {
-        paint!!.reset()
-        paint!!.color = resources.getColor(android.R.color.white)
-        paint!!.strokeWidth = 5f
-        paint!!.style = Paint.Style.STROKE
-        paint!!.isAntiAlias = true
-        canvas.drawCircle((clockWidth / 2).toFloat(), (clockHeight / 2).toFloat(), (radius + padding - 10).toFloat(), paint!!)
+
+        with(paint) {
+            reset()
+            color = resources.getColor(android.R.color.white)
+            strokeWidth = 0.5f
+            style = Paint.Style.STROKE
+            isAntiAlias = true
+        }
+
+        canvas.drawCircle((clockWidth / 2).toFloat(), (clockHeight / 2).toFloat(), (radius + padding - 10).toFloat(), paint)
     }
 
 }
