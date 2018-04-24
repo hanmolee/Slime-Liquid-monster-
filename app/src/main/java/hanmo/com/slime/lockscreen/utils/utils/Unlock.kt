@@ -25,7 +25,7 @@ import android.view.GestureDetector.SimpleOnGestureListener
  */
 class Unlock constructor(private val context: Activity, private val listener: SimpleGestureListener) : SimpleOnGestureListener() {
     var swipeMinDistance = 100
-    var swipeMaxDistance = 350
+    var swipeMaxDistance = 200
     var swipeMinVelocity = 100
 
     var mode = MODE_DYNAMIC
@@ -102,14 +102,6 @@ class Unlock constructor(private val context: Activity, private val listener: Si
         return false
     }
 
-    override fun onDoubleTap(arg: MotionEvent): Boolean {
-        this.listener.onDoubleTap()
-        return true
-    }
-
-    override fun onDoubleTapEvent(arg: MotionEvent): Boolean {
-        return true
-    }
 
     override fun onSingleTapConfirmed(arg: MotionEvent): Boolean {
 
@@ -123,7 +115,6 @@ class Unlock constructor(private val context: Activity, private val listener: Si
 
     interface SimpleGestureListener {
         fun onSwipe(direction: Int)
-        fun onDoubleTap()
     }
 
     companion object {

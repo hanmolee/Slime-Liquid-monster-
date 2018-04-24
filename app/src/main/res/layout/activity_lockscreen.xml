@@ -9,6 +9,18 @@
     android:layout_height="match_parent"
     android:background="@drawable/images">
 
+    <FrameLayout
+        android:id="@+id/swipeGesture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+    </FrameLayout>
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"

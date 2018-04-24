@@ -25,17 +25,15 @@ import rx.subscriptions.CompositeSubscription
 import java.util.concurrent.TimeUnit
 import android.widget.Toast
 import android.R.attr.direction
-
-
+import hanmo.com.slime.lockscreen.utils.utils.OnSwipeTouchListener
 
 
 /**
  * Created by hanmo on 2018. 4. 18..
  */
-class LockScreenActivity : AppCompatActivity(), Unlock.SimpleGestureListener {
+class LockScreenActivity : AppCompatActivity() {
 
     private lateinit var compositeDisposable: CompositeDisposable
-    private lateinit var detector : Unlock
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,9 +93,23 @@ class LockScreenActivity : AppCompatActivity(), Unlock.SimpleGestureListener {
     override fun onResume() {
         super.onResume()
         compositeDisposable = CompositeDisposable()
-        detector = Unlock(this, this)
         setMenuButton()
+        setSwipeView()
         (application as SlimeApplication).lockScreenShow = true
+    }
+
+    private fun setSwipeView() {
+        swipeGesture.setOnTouchListener(object : OnSwipeTouchListener(this@LockScreenActivity) {
+            override fun onSwipeRight() {
+                Toast.makeText(this@LockScreenActivity, "right", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+
+            override fun onSwipeLeft() {
+                Toast.makeText(this@LockScreenActivity, "left", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        })
     }
 
 
@@ -108,30 +120,11 @@ class LockScreenActivity : AppCompatActivity(), Unlock.SimpleGestureListener {
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        this.detector.onTouchEvent(ev)
         return super.dispatchTouchEvent(ev)
     }
 
     override fun onBackPressed() {
         DLog.e("뒤로가기 클릭!!")
-    }
-
-    override fun onSwipe(direction: Int) {
-        var str = ""
-
-        when (direction) {
-
-            Unlock.SWIPE_RIGHT -> str = "Swipe Right"
-            Unlock.SWIPE_LEFT -> str = "Swipe Left"
-            Unlock.SWIPE_DOWN -> str = "Swipe Down"
-            Unlock.SWIPE_UP -> str = "Swipe Up"
-        }
-
-        finish()
-    }
-
-    override fun onDoubleTap() {
-        Toast.makeText(this, "double tab!!", Toast.LENGTH_SHORT).show()
     }
 
 }
