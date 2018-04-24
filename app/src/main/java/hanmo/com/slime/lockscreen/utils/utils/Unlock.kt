@@ -1,134 +1,101 @@
 package hanmo.com.slime.lockscreen.utils.utils
 
-import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
-import android.util.AttributeSet
-import android.util.Log
-import android.view.*
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.support.v4.view.accessibility.AccessibilityEventCompat.setAction
+import android.support.constraint.ConstraintLayout
 import android.view.MotionEvent
-import android.text.method.Touch.onTouchEvent
-import android.view.GestureDetector
-import android.app.Activity
-import android.view.GestureDetector.SimpleOnGestureListener
-
-
-
-
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.TranslateAnimation
 
 /**
- * Created by hanmo on 2018. 4. 23..
+ * Created by hanmo on 2018. 4. 24..
  */
-class Unlock constructor(private val context: Activity, private val listener: SimpleGestureListener) : SimpleOnGestureListener() {
-    var swipeMinDistance = 100
-    var swipeMaxDistance = 200
-    var swipeMinVelocity = 100
+open class Unlock(val context: Context, val lockScreenView: ConstraintLayout) : View.OnTouchListener {
 
-    var mode = MODE_DYNAMIC
-    private var running = true
-    private var tapIndicator = false
-    private val detector: GestureDetector = GestureDetector(context, this)
+    private var firstTouchX = 0f
+    private var layoutPrevX = 0f
+    private var lastLayoutX = 0f
+    private var layoutInPrevX = 0f
+    private var isLockOpen = false
+    private var touchMoveX = 0
+    private val touchInMoveX = 0
 
-    fun onTouchEvent(event: MotionEvent?) {
+    override fun onTouch(v: View, event: MotionEvent): Boolean {
 
-        if (!this.running)
-            return
-
-        val result = this.detector.onTouchEvent(event)
-
-        if (this.mode == MODE_SOLID)
-            event?.action = MotionEvent.ACTION_CANCEL
-        else if (this.mode == MODE_DYNAMIC) {
-
-            if (event?.action == ACTION_FAKE)
-                event.action = MotionEvent.ACTION_UP
-            else if (result)
-                event?.action = MotionEvent.ACTION_CANCEL
-            else if (this.tapIndicator) {
-                event?.action = MotionEvent.ACTION_DOWN
-                this.tapIndicator = false
+        when (event.action and MotionEvent.ACTION_MASK) {
+            MotionEvent.ACTION_DOWN -> {
+                firstTouchX = event.x
+                layoutPrevX = lockScreenView.x
+                isLockOpen = true
             }
-
-        }
-        //else just do nothing, it's Transparent
-    }
-
-    fun setEnabled(status: Boolean) {
-        this.running = status
-    }
-
-    override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float,
-                         velocityY: Float): Boolean {
-        var velocityX = velocityX
-        var velocityY = velocityY
-
-        val xDistance = Math.abs(e1.x - e2.x)
-        val yDistance = Math.abs(e1.y - e2.y)
-
-        if (xDistance > this.swipeMaxDistance || yDistance > this.swipeMaxDistance)
-            return false
-
-        velocityX = Math.abs(velocityX)
-        velocityY = Math.abs(velocityY)
-        var result = false
-
-        if (velocityX > this.swipeMinVelocity && xDistance > this.swipeMinDistance) {
-            if (e1.x > e2.x)
-            // right to left
-                this.listener.onSwipe(SWIPE_LEFT)
-            else
-                this.listener.onSwipe(SWIPE_RIGHT)
-
-            result = true
-        } else if (velocityY > this.swipeMinVelocity && yDistance > this.swipeMinDistance) {
-            if (e1.y > e2.y)
-            // bottom to up
-                this.listener.onSwipe(SWIPE_UP)
-            else
-                this.listener.onSwipe(SWIPE_DOWN)
-
-            result = true
+            MotionEvent.ACTION_MOVE -> {
+                if (isLockOpen) {
+                    touchMoveX = (event.rawX - firstTouchX).toInt()
+                    if (lockScreenView.x >= 0) {
+                        lockScreenView.x = (layoutPrevX + touchMoveX).toInt().toFloat()
+                        if (lockScreenView.x < 0) {
+                            lockScreenView.x = 0f
+                        }
+                        lastLayoutX = lockScreenView.x
+                    }
+                } else {
+                    return false
+                }
+            }
+            MotionEvent.ACTION_UP -> { // 1
+                if (isLockOpen) {
+                    lockScreenView.x = lastLayoutX
+                    lockScreenView.y = 0f
+                    optimizeForground(lastLayoutX)
+                }
+                isLockOpen = false
+                firstTouchX = 0f
+                layoutPrevX = 0f
+                layoutInPrevX = 0f
+                touchMoveX = 0
+                lastLayoutX = 0f
+            }
+            else -> {
+            }
         }
 
-        return result
+        return true
     }
 
-    override fun onSingleTapUp(e: MotionEvent): Boolean {
-        this.tapIndicator = true
-        return false
-    }
+    private fun optimizeForground(forgroundX: Float) {
 
+        val displayMetrics = context.resources.displayMetrics
+        val mDeviceWidth = displayMetrics.widthPixels
+        val mDevideDeviceWidth = mDeviceWidth / 6
 
-    override fun onSingleTapConfirmed(arg: MotionEvent): Boolean {
+        if (forgroundX < mDevideDeviceWidth) {
+            var startPostion = 0
+            startPostion = mDevideDeviceWidth
+            while (startPostion >= 0) {
+                lockScreenView.x = startPostion.toFloat()
+                startPostion--
+            }
+        } else {
+            val animation = TranslateAnimation(0f, mDeviceWidth.toFloat(), 0f, 0f)
+            animation.duration = 300
+            animation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {}
 
-        if (this.mode == MODE_DYNAMIC) {        // we owe an ACTION_UP, so we fake an
-            arg.action = ACTION_FAKE      //action which will be converted to an ACTION_UP later.
-            this.context.dispatchTouchEvent(arg)
+                override fun onAnimationEnd(animation: Animation) {
+                    lockScreenView.x = mDeviceWidth.toFloat()
+                    lockScreenView.y = 0f
+                    onFinish()
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {}
+            })
+
+            lockScreenView.startAnimation(animation)
         }
-
-        return false
     }
 
-    interface SimpleGestureListener {
-        fun onSwipe(direction: Int)
-    }
+    open fun onFinish() {
 
-    companion object {
-
-        val SWIPE_UP = 1
-        val SWIPE_DOWN = 2
-        val SWIPE_LEFT = 3
-        val SWIPE_RIGHT = 4
-
-        val MODE_TRANSPARENT = 0
-        val MODE_SOLID = 1
-        val MODE_DYNAMIC = 2
-
-        private val ACTION_FAKE = -13 //just an unlikely number
     }
 
 }
