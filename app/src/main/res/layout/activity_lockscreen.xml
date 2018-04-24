@@ -7,19 +7,18 @@
     android:id="@+id/lockScreenBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/images">
+    android:background="@android:color/transparent">
 
-    <FrameLayout
-        android:id="@+id/swipeGesture"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/lockScreenView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/images"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -163,4 +162,6 @@
 
 
     </android.support.v7.widget.RecyclerView>
+
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

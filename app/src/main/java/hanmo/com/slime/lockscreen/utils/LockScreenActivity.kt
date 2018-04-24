@@ -7,25 +7,18 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
-import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
 import hanmo.com.slime.R
 import hanmo.com.slime.SlimeApplication
 import hanmo.com.slime.util.DLog
 import hanmo.com.slime.util.RippleViewCreator
 import kotlinx.android.synthetic.main.activity_lockscreen.*
-import com.gordonwong.materialsheetfab.MaterialSheetFab
-import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.view.clicks
-import hanmo.com.slime.lockscreen.utils.utils.Unlock
 import hanmo.com.slime.menu.MainActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import rx.subscriptions.CompositeSubscription
 import java.util.concurrent.TimeUnit
-import android.widget.Toast
-import android.R.attr.direction
-import hanmo.com.slime.lockscreen.utils.utils.OnSwipeTouchListener
+import android.view.animation.Animation
+import android.view.animation.TranslateAnimation
 
 
 /**
@@ -99,28 +92,97 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     private fun setSwipeView() {
-        swipeGesture.setOnTouchListener(object : OnSwipeTouchListener(this@LockScreenActivity) {
-            override fun onSwipeRight() {
-                Toast.makeText(this@LockScreenActivity, "right", Toast.LENGTH_SHORT).show()
-                finish()
-            }
-
-            override fun onSwipeLeft() {
-                Toast.makeText(this@LockScreenActivity, "left", Toast.LENGTH_SHORT).show()
-                finish()
-            }
-        })
+        lockScreenView.setOnTouchListener(mViewTouchListener)
     }
 
+    private val mViewTouchListener = object : View.OnTouchListener {
+        private var firstTouchX = 0f
+        private var layoutPrevX = 0f
+        private var lastLayoutX = 0f
+        private var layoutInPrevX = 0f
+        private var isLockOpen = false
+        private var touchMoveX = 0
+        private val touchInMoveX = 0
+
+        override fun onTouch(v: View, event: MotionEvent): Boolean {
+
+            when (event.action and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_DOWN -> {
+                    firstTouchX = event.x
+                    layoutPrevX = lockScreenView.x
+                    isLockOpen = true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    if (isLockOpen) {
+                        touchMoveX = (event.rawX - firstTouchX).toInt()
+                        if (lockScreenView.x >= 0) {
+                            lockScreenView.x = (layoutPrevX + touchMoveX).toInt().toFloat()
+                            if (lockScreenView.x < 0) {
+                                lockScreenView.x = 0f
+                            }
+                            lastLayoutX = lockScreenView.getX()
+                        }
+                    } else {
+                        return false
+                    }
+                }
+                MotionEvent.ACTION_UP -> { // 1
+                    if (isLockOpen) {
+                        lockScreenView.x = lastLayoutX
+                        lockScreenView.y = 0f
+                        optimizeForground(lastLayoutX)
+                    }
+                    isLockOpen = false
+                    firstTouchX = 0f
+                    layoutPrevX = 0f
+                    layoutInPrevX = 0f
+                    touchMoveX = 0
+                    lastLayoutX = 0f
+                }
+                else -> {
+                }
+            }
+
+            return true
+        }
+    }
+
+    private fun optimizeForground(forgroundX: Float) {
+
+        val displayMetrics = resources.displayMetrics
+        val mDeviceWidth = displayMetrics.widthPixels
+        val mDevideDeviceWidth = mDeviceWidth / 6
+
+        if (forgroundX < mDevideDeviceWidth) {
+            var startPostion = 0
+            startPostion = mDevideDeviceWidth
+            while (startPostion >= 0) {
+                lockScreenView.x = startPostion.toFloat()
+                startPostion--
+            }
+        } else {
+            val animation = TranslateAnimation(0f, mDevideDeviceWidth.toFloat(), 0f, 0f)
+            animation.duration = 300
+            animation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {}
+
+                override fun onAnimationEnd(animation: Animation) {
+                    lockScreenView.x = mDevideDeviceWidth.toFloat()
+                    lockScreenView.y = 0f
+                    finish()
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {}
+            })
+
+            lockScreenView.startAnimation(animation)
+        }
+    }
 
     override fun onPause() {
         super.onPause()
         compositeDisposable.clear()
         (application as SlimeApplication).lockScreenShow = false
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        return super.dispatchTouchEvent(ev)
     }
 
     override fun onBackPressed() {
