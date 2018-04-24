@@ -17,8 +17,6 @@ import hanmo.com.slime.menu.MainActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
-import android.view.animation.Animation
-import android.view.animation.TranslateAnimation
 import hanmo.com.slime.lockscreen.utils.utils.Unlock
 
 
@@ -28,6 +26,21 @@ import hanmo.com.slime.lockscreen.utils.utils.Unlock
 class LockScreenActivity : AppCompatActivity() {
 
     private lateinit var compositeDisposable: CompositeDisposable
+
+    private val onItemClickListener = object : LockScreenMenuAdapter.OnItemClickListener {
+        override fun onItemClick(view: View, position: Int) {
+            when(position) {
+                0 -> {
+
+                }
+                1 -> { }
+                2 -> { }
+                3 -> { }
+            }
+        }
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +60,9 @@ class LockScreenActivity : AppCompatActivity() {
             layoutAnimation = animation
             setHasFixedSize(true)
             layoutManager = android.support.v7.widget.LinearLayoutManager(applicationContext)
-            adapter = LockScreenMenuAdapter(menuList)
+            val menuAdapter = LockScreenMenuAdapter(menuList)
+            menuAdapter.setOnItemClickListener(onItemClickListener)
+            adapter = menuAdapter
         }
     }
 

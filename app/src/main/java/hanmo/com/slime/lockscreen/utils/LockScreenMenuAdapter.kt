@@ -2,6 +2,7 @@ package hanmo.com.slime.lockscreen.utils
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import hanmo.com.slime.R
 import kotlinx.android.synthetic.main.item_lockscreen_menu.view.*
@@ -10,6 +11,16 @@ import kotlinx.android.synthetic.main.item_lockscreen_menu.view.*
  * Created by hanmo on 2018. 4. 23..
  */
 class LockScreenMenuAdapter(val menuList: Array<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    lateinit var itemClickListener : OnItemClickListener
+
+    fun setOnItemClickListener(itemClickListener : OnItemClickListener) {
+        this.itemClickListener = itemClickListener
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(view : View, position: Int)
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -29,12 +40,16 @@ class LockScreenMenuAdapter(val menuList: Array<String>) : RecyclerView.Adapter<
     }
 
     inner class LcMenuViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_lockscreen_menu, parent, false)) {
+            LayoutInflater.from(parent.context).inflate(R.layout.item_lockscreen_menu, parent, false)), View.OnClickListener {
 
         fun bindView(item: String) {
             with(itemView){
                 this.menuTitle.text = item
             }
+        }
+
+        override fun onClick(v: View?) {
+            itemClickListener.onItemClick(itemView, adapterPosition)
         }
     }
 
